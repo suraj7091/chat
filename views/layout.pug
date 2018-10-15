@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    link(rel='stylesheet', href='/plugins/node_modules/bootstrap/dist/css/bootstrap.min.css')
+
+    title=title
+
+    // Material Design Bootstrap
+    link(href='/plugins/node_modules/mdbootstrap/css/mdb.min.css', rel='stylesheet')
+    // Main styles for this application
+    link(href='/vendors/coreui/css/style.css', rel='stylesheet')
+    link(href='/stylesheets/base.css', rel='stylesheet')
+    link(href='/stylesheets/main.css', rel='stylesheet')
+
+    block styles
+
+  head
+    // Icons
+  body.app.header-fixed.sidebar-fixed.aside-menu-fixed.sidebar-lg-show
+    header.app-header.navbar
+      a.btn.btn-indigo.btn-.waves-effect.waves-light(target='_blank', href='/logout',style="margin-left:80%;") logout
+
+        //- span.navbar-toggler-icon
+        
+
+                //- page content
+    
+    block content
+    // CoreUI and necessary plugins
+    script(src='/plugins/node_modules/jquery/dist/jquery.min.js')
+    script(src='/plugins/node_modules/popper.js/dist/popper.min.js')
+    script(src='/plugins/node_modules/bootstrap/dist/js/bootstrap.min.js')
+    script(src='/plugins/node_modules/mdbootstrap/js/mdb.min.js')
+   
+  
+    block scripts  
+  // CoreUI and necessary plugins

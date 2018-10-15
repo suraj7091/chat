@@ -1,0 +1,114 @@
+extends ../../../views/layout
+block styles
+    <link rel="stylesheet" href="stylesheet/chat_index.css">
+block content
+    .card.rare-wind-gradient.chat-room
+        .card-header
+          |  Chat
+        .card-body
+          // Grid row
+          .row.px-lg-2.px-2
+            // Grid column
+            .col-md-6.col-xl-4.px-0
+              h6.font-weight-bold.mb-3.text-center.text-lg-left Member
+              .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue
+                ul.list-unstyled.friend-list#user
+                    each item in items 
+                     
+                       if(item.username!=username)
+                          div(id=item.username, class="person")
+                              li.p-2
+                                a.d-flex.justify-content-between
+                                  if item.profile_pic.data
+                                    img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='img/user/'+item.username, alt='avatar')
+                                  else
+                                    img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='/images/profile.png', alt='avatar')
+                                  .text-small
+                                  p=item.username
+                                  p.last-message.text-muted
+                                  - function get_date(i) {
+                                  - var d = new Date(i)
+                                  - var curd=new Date()
+                                  - if(curd.getMonth()==d.getMonth()&&curd.getDate()==d.getDate()){
+                                  - return (d.getHours()).toString()+":"+(d.getMinutes()).toString()
+                                  - }else{
+                                  - return (d.getDate()).toString()+"/"+(d.getMonth()+1).toString()
+                                  - }
+                                  - }
+                                  .chat-footer
+                                    if(allusers[item.username]!=null)
+                                      svg(height='20', width='20' )
+                                        circle(cx='10', cy='10', r='10', stroke='', stroke-width='3', fill='green' style='padding-left:0px;')
+                                    else
+                                      p.text-smaller.text-muted.mb-0(id=item.username+"4")='last login '+get_date(item.last_logout)
+                                    if(typeof(oldchat)!=undefined && typeof(oldchat[item.username])!=undefined )
+                                       if(oldchat[item.username]!=0)
+                                        span.badge.badge-danger.float-right(id=item.username+"3")=oldchat[item.username]
+                                       else
+                                        span.badge.badge-danger.float-right(id=item.username+"3" style='display:none')=0
+
+                                    span.float-left
+                                      p(id=item.username+"2" style='color:green' class='chat')
+                                     
+                                  
+                          hr            
+            // Grid column
+            // Grid column
+            .col-md-6.col-xl-8.pl-md-3.px-lg-auto.px-0
+              .chat-message
+                ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                  
+                .white#white(style='display:none')
+                  .form-group.basic-textarea
+                      form
+                        input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
+                        button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right#send(type='submit') Send         
+    ul#thread
+block scripts
+  script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+  script(src='js/socket.io.js')
+  script(src='js/client.js') 
+  script(type='text/javascript').
+        var from='#{username}';
+        var to;
+        var classname = document.getElementsByClassName("person");
+        var myFunction = function() 
+        { 
+          document.getElementById("chat-message").innerHTML='';
+          
+          document.getElementById("white").style.display='block';
+          var attribute = this.getAttribute("id");
+          document.getElementById(attribute+"3").style.display='none';
+          document.getElementById(attribute+"3").innerHTML=0;
+          var person=document.getElementsByClassName("person");
+          to=attribute;
+          for(var j=0;j<person.length;j++)
+          {
+             person[j].style.backgroundColor='white';
+          }
+          document.getElementById(attribute).style.backgroundColor='#eff2f4';
+          $.getJSON(window.location.href+'/'+attribute, function(json)
+          {
+            myjson = json;
+  
+            for(var j=0;j<myjson.messages.length;j++)
+            {
+            var  date=myjson.messages[j].created;
+            var  changeddate=date.split(" ");
+              if(myjson.messages[j].sender=='#{username}'){
+              $("#chat-message").append('  <li class="d-flex justify-content-between mb-4" ><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px;" > <div class="header"><strong class="primary-font">'+myjson.messages[j].sender+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+changeddate[1]+' '+changeddate[2]+' '+changeddate[3]+'</small></div><hr class="w-100"/> <p class="mb-0">'+myjson.messages[j].content+'</p </div> </li>');
+              }
+              else
+              {
+                $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body p-3 z-depth-1 " style="margin-left:70%;min-width:200px; background-color:#EEEEEE"><div class="header"><strong class="primary-font">'+myjson.messages[j].sender+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+changeddate[1]+' '+changeddate[2]+' '+changeddate[3]+'</small></div><hr class="w-100"/><p class="mb-0">'+myjson.messages[j].content+'</p></div> </li>');
+              }
+            }
+            var elem = document.getElementById('chat-message');
+            elem.scrollTop = elem.scrollHeight;
+          });
+        };
+        for (var i = 0; i < classname.length; i++) {
+        classname[i].addEventListener('click', myFunction, false);
+        }
+  
+
+   
