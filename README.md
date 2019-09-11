@@ -6,7 +6,7 @@ chat system based on socket io,express and mongodb<br>
    &nbsp;&nbsp; 4.if user is offline message count is stored for that user <br>
    &nbsp;&nbsp; 5.message count is also store and notified if user is chatting to someone and someone else send message<br>
 <b>USES</b><br>
-  &nbsp;&nbsp;1.download the file<br>
+  &nbsp;&nbsp;1.download the file from <b>surechat branch</b><br>
   &nbsp;&nbsp;2.move to downloaded folder and extract<br>
   &nbsp;&nbsp;3.use npm install to install the dependencies<br>
   &nbsp;&nbsp;4.now start the server using npm start<br>
