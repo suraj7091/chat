@@ -1,0 +1,65 @@
+
+block styles
+  link(rel='stylesheet', href='../plugins/bulma-extensions/bulma-carousel/dist/bulma-carousel.min.css')
+  link(rel='stylesheet', href='../stylesheets/register.css')
+  
+
+block content
+  .fluid-container
+    .registerbox
+      |Registration Form
+      form(role='form', action="",method="post")
+        .control
+          input.input.is-small(type='text', placeholder='Username',name="username")
+          
+
+        .control
+          input.input.is-small(type='password', placeholder='Password',name="password")
+          
+        .field.is-grouped
+          p.control
+            button.button.is-success(type='submit')
+              | Submit
+          p.control
+            a(href='/').button.is-light
+              | Cancel
+
+
+
+
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  //- .fluid-container
+  //-   .registerbox
+  //-     h1 Register Page
+  //-     p.lead Say something worthwhile here.
+  //-     br
+  //-     form(role='form', action="/admin/register",method="post")
+  //-       .form-group
+  //-           input.form-control(type='text', name="username", placeholder='Enter Username')
+  //-       .form-group
+  //-         input.form-control(type='password', name="password", placeholder='Password')
+  //-       button.btn.btn-default(type='submit') Submit
+  //-       a(href='/')
+  //-         button.btn.btn-primary(type="button") Cancel
+  //-     br

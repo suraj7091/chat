@@ -1,0 +1,46 @@
+.edtyro-grey {
+    background-color: #555555;
+    color:#20a8d8 !important;
+}
+
+.edtyro-grey-special {
+    background-color: rgba(50, 50, 50, 0.8);
+    color:#20a8d8 !important;
+}
+
+.edtyro-logout, .edtyro-logout > i{
+    color: #FF0000 !important;
+}
+
+.large {
+    font-size: 13px;
+}
+
+.light-padding {
+    margin: 0px 5px;
+}
+
+.menu-bars
+{
+    color:#DDDDDD;
+}
+.version
+{
+    padding-top:12px;
+}
+.base-link-seperator
+{
+    padding-left:20px;
+}
+.bc-icons-2 .breadcrumb-item + .breadcrumb-item::before
+ {
+    content: none;
+ }
+.bc-icons-2 .breadcrumb-item.active
+ {
+    color:#CCCCCC; 
+}
+.sidebar-toggler 
+{
+   color:#AAAAAA !important;
+}

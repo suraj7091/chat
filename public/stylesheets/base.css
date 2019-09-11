@@ -1,0 +1,91 @@
+a{
+    color:#EC6075;
+}
+a:hover
+{
+    color:#000000;
+    text-decoration: none;
+}
+
+.breadcrumb {
+    border-bottom: none;
+}
+
+.app-header {
+    background-color: #181c1f;
+    /*height:6%;*/
+    height: 50px;
+    border-bottom: none;
+}
+
+.app-header .nav-item .nav-link {
+    padding-top: 7px !important;
+    padding-bottom: 5px !important;
+}
+
+#ui-view {
+    margin-top: 30px;
+}
+
+.sidebar
+{
+    background-color: #FFFFFF;
+    /*margin-top:0%;*/
+    
+}
+
+.sidebar .nav-link
+{
+    color:#000000;
+}
+.sidebar .nav-title
+{
+    color:#000000;
+}
+top
+.sidebar .nav-dropdown.open .nav-link {
+    color: #EEEEEE;
+    background-color: #20a8d8;
+    padding-left: 25px;
+}
+
+.sidebar-minimized .sidebar .nav-dropdown-items .nav-item .nav-link  {
+    color: #EEEEEE;
+    background-color: #20a8d8;
+}
+
+.sidebar .sidebar-minimizer
+{
+    background-color:#000000;
+    margin-bottom:90px;
+}
+.belowheader
+{
+    background-color: rgba(85, 85, 85, 0.1);
+    width:100%;
+    height:45px;
+    color:#FFFFFF;
+    margin-top: 45px;
+    position: fixed;
+    z-index: 1;
+}
+.header-fixed .app-body
+{
+    margin-top:90px;
+}
+.img-avatar
+{
+    border-radius:5px;
+    width:30px;
+    height:30px !important;
+}
+.foot-link
+{
+    margin-left:10%;
+    display:inline;
+}
+.foot-div
+{
+    white-space: nowrap;
+}
+

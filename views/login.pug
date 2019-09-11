@@ -1,0 +1,53 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, shrink-to-fit=no')
+    meta(http-equiv='x-ua-compatible', content='ie=edge')
+    title login
+    // Font Awesome
+    link(href='plugins/node_modules/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    // Bootstrap core CSS
+    link(href='plugins/node_modules/mdbootstrap/css/bootstrap.min.css', rel='stylesheet')
+    // Material Design Bootstrap
+    link(href='plugins/node_modules/mdbootstrap/css/mdb.min.css', rel='stylesheet')
+  body(style='background-color:#cad2d9')
+    main
+      .container(style='margin-top:10%;')
+        .row
+          .col-md-3
+          .col-md-6
+            .card(style='')
+              .card-header.white-text.text-center.py-3(style='background-color:#181c1f')
+                |LOGIN
+              // Card content
+              .card-header.white-text.text-center.py-2(style='background-color:#555555')
+              .card-body.px-lg-5.pt-0
+                // Form
+                form.text-center(style='background-color:#ffffff', action="",method="post")
+                  // Email
+                  .md-form
+                    input#materialLoginFormEmail.form-control(type='text', name='username')
+                    label(for='materialLoginFormEmail') Login Id
+                  // Password
+                  .md-form
+                    input#materialLoginFormPassword.form-control(type='password',  name='password' )
+                    label(for='materialLoginFormPassword') Password
+                  .d-flex.justify-content-around
+                    div
+                      // Remember me
+                      .form-check
+                        input#materialLoginFormRemember.form-check-input(type='checkbox')
+                        label.form-check-label(for='materialLoginFormRemember') Remember me
+                    div
+                      // Forgot password
+                    a(href='')
+                       p(style='color:#ec6075') Forgot password?
+                  // Sign in button
+                  button.btn.btn-rounded.btn-block.my-4.waves-effect.z-depth-0(type='submit',style='background-color:#555555') Sign in
+                // Form
+    script(src='plugins/node_modules/mdbootstrap/js/jquery-3.4.1.min.js')
+    script(src='plugins/node_modules/popper.js')
+    script(src='plugins/node_modules/mdbootstrap/js/bootstrap.min.js')
+    script(src='plugins/node_modules/mdbootstrap/js/mdb.min.js')
+    
