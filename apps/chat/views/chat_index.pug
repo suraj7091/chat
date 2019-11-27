@@ -12,6 +12,10 @@ block content
             .col-md-6.col-xl-4.px-0
               h6.font-weight-bold.mb-3.text-center.text-lg-left Member
               .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue
+                form#userSearchForm 
+                  input.user-search(type="text",placeholder=" Find User"  required)
+                  button.search-button(type='submit') search
+                hr
                 ul.list-unstyled.friend-list#user
                     each item in items 
                      
@@ -59,24 +63,35 @@ block content
                 ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                  
                 .white#white(style='display:none')
                   .form-group.basic-textarea
-                      form
+                      form#messageform
                         input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
                         button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right#send(type='submit') Send         
     ul#thread
 block scripts
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script(src='js/socket.io.js')
+  script(src='js/userSearch.js')
   script(src='js/client.js') 
   script(type='text/javascript').
         var from='#{username}';
         var to;
+        var params = (new URL(document.location)).searchParams;
+        var userId = params.get("id");
         var classname = document.getElementsByClassName("person");
-        var myFunction = function() 
+        var myFunction = function()
         { 
           document.getElementById("chat-message").innerHTML='';
-          
+          var attribute;
           document.getElementById("white").style.display='block';
-          var attribute = this.getAttribute("id");
+          if(userId!=null)
+          {
+           
+            attribute=userId
+          }
+          else
+          {
+          attribute = this.getAttribute("id");
+          }
           document.getElementById(attribute+"3").style.display='none';
           document.getElementById(attribute+"3").innerHTML=0;
           var person=document.getElementsByClassName("person");
@@ -86,7 +101,7 @@ block scripts
              person[j].style.backgroundColor='white';
           }
           document.getElementById(attribute).style.backgroundColor='#eff2f4';
-          $.getJSON(window.location.href+'/'+attribute, function(json)
+          $.post('/chat?id='+attribute,{},function(json)
           {
             myjson = json;
   
@@ -104,8 +119,16 @@ block scripts
             }
             var elem = document.getElementById('chat-message');
             elem.scrollTop = elem.scrollHeight;
-          });
+          },'json');
+
+          userId=null
         };
+       
+        
+        if(userId!=null)
+        {
+          myFunction(userId);
+        }
         for (var i = 0; i < classname.length; i++) {
         classname[i].addEventListener('click', myFunction, false);
         }

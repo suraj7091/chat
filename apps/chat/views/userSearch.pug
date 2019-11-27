@@ -1,0 +1,65 @@
+extends ../../../views/layout
+block styles
+    <link rel="stylesheet" href="stylesheet/chat_index.css">
+    <link rel="stylesheet" href="stylesheet/userSearch.css">
+block content
+    .card.rare-wind-gradient.chat-room
+        .card-header
+          |  Chat
+        .card-body
+          // Grid row
+          .row.px-lg-2.px-2
+            // Grid column
+            .col-md-8.col-xl-8.px-0.offset-md-2
+              h6.font-weight-bold.mb-3.text-center.text-lg-left matched user
+              .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue
+                form#userSearchForm 
+                  input.user-search(type="text",placeholder=" Find User"  required)
+                  button.search-button(type='submit') search
+                  button.goback GoBack   
+                hr
+                ul.list-unstyled.friend-list#user
+                    each item in items 
+                       if(item.username!=username)
+                          div(id=item.username, class="person")
+                              li.p-2.userList
+                                a.d-flex.justify-content-between
+                                  if item.profile_pic.data
+                                    img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='img/user/'+item.username, alt='avatar')
+                                  else
+                                    img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='/images/profile.png', alt='avatar')
+                                  .text-small
+                                  p=item.username
+                                  .chat-footer
+                                    span.float-left
+                                      p(id=item.username+"2" style='color:green' class='chat')
+                                     
+                                  
+                          hr            
+            // Grid column
+            // Grid column      
+    ul#thread
+block scripts
+  script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+  script(src='js/socket.io.js')
+  script(src='js/userSearch.js')
+  script(src='js/client.js') 
+  script(type='text/javascript').
+        var from='#{username}';
+        var to;
+        var classname = document.getElementsByClassName("person");
+        var myFunction = function() 
+        { 
+          var attribute = this.getAttribute("id");
+          window.location.href='/chat?id='+attribute
+        };
+        for (var i = 0; i < classname.length; i++) {
+        classname[i].addEventListener('click', myFunction, false);
+        }
+        $('.goback').click(function(){
+          window.location.href='/chat'
+        }
+        )
+  
+
+   

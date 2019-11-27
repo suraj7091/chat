@@ -1,0 +1,12 @@
+.userList{
+    padding-left:10%;
+    padding-right:10%;
+    font-size:15px;
+}
+.goback{
+    margin-left:20px;
+    background-color:black;
+    border:none;
+    color:white;
+    height:27px;
+}

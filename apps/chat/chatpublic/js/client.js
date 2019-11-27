@@ -3,7 +3,7 @@ var timeoutclient;
 var type=false;
 var socket;
 //connecting client to server through socket
-   socket = io.connect("http://192.168.128.199:7777",{secure:true});  socket.on("connect", function(data) {
+   socket = io.connect("http://192.168.128.151:7777",{secure:true});  socket.on("connect", function(data) {
     socket.emit("join", socket.id,from); 
   });
   socket.on("type", function(msg,sender){
@@ -43,7 +43,7 @@ function timeoutclientFunction(){
      }
   });
   // sends message to server, resets & prevents default form action
-  $("form").submit(function() { 
+  $("#messageform").submit(function() { 
     var message = $("#exampleFormControlTextarea2.form-control.pl-2.my-0").val();
     if(message!=''){
     socket.emit("messages",message,from,to);

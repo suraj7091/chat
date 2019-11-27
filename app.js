@@ -16,6 +16,7 @@ var registerRouter = require('./routes/register');
 
 // cusstom app routes
 var chatRouter = require('./apps/chat/routes/chat');
+var userSearchRouter = require('./apps/chat/routes/userSearch');
 
 var app = express();
 var port=3000
@@ -58,6 +59,7 @@ app.use('/register',registerRouter);
 
 // app router usage
 app.use('/chat', chatRouter);
+app.use('/user-search',userSearchRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

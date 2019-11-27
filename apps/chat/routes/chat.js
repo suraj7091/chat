@@ -55,11 +55,11 @@ router.get('/', function (req, res, next) {
   }
 });
 
-router.get('/:attribute', function (req, res, next) {
+router.post('/', function (req, res, next) {
 
   if (req.user) {
     // Make sure user exists
-    User.findOne({ 'username': req.params.attribute }).exec(function (err, item) {
+    User.findOne({ 'username': req.query.id}).exec(function (err, item) {
       if (err) {
         return next(new Error('Could not load content!'));
       }
