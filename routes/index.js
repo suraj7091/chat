@@ -8,7 +8,7 @@ var User =  require('../models/user');
 router.get('/', function(req, res, next) {
   if(req.user){
     res.render('index', {
-      title: 'Edtyro',
+      title: 'Chat',
       user: req.user
     });
   }else{
