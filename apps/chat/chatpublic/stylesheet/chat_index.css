@@ -56,3 +56,19 @@
   height:27px;
 
 }
+.sendmsg{
+  display: flex;
+}
+.send-msg-btn{
+  height: 38px;
+  margin-top: 0px;
+}
+.user-list{
+  height:80vh !important;
+}
+#chat-message{
+  height:78vh;
+}
+.chat-container{
+  height: 94vh;
+}

@@ -1,48 +1,48 @@
-var express = require('express');
-var session = require('express-session');
+var express = require("express");
+var session = require("express-session");
 var router = express.Router();
 var app = express();
 var server = require("http").createServer(app);
 var io = require("socket.io")(server);
-var path = require('path');
-var uniqid = require('uniqid');
+var path = require("path");
+var uniqid = require("uniqid");
 var user;
-var fs = require('fs');
-var fileName = path.join(__dirname, 'alluser.json');
+var fs = require("fs");
+var fileName = path.join(__dirname, "alluser.json");
 allusers = {};
 groupid = {};
 var id;
 // Initializations
-var current_app_location = path.join(__dirname, '..');
+var current_app_location = path.join(__dirname, "..");
 // DB Initializations
-var User = require('../../../models/user');
-var Chat = require(current_app_location + '/models/chatrecord');
-var Oldchat = require(current_app_location + '/models/oldchat');
+var User = require("../../../models/user");
+var Chat = require(current_app_location + "/models/chatrecord");
+var Oldchat = require(current_app_location + "/models/oldchat");
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
+router.get("/", function (req, res, next) {
   if (req.user) {
     User.find({}).exec(function (err, items) {
       if (err) {
         console.log("Error:", err);
       } else {
-        Oldchat.findOne({ '_id': req.user.username }).exec(function (err, oldchat) {
+        Oldchat.findOne({ _id: req.user.username }).exec(function (
+          err,
+          oldchat
+        ) {
           if (err) {
             console.log(err);
-          }
-          else {
-
-
+          } else {
             oldchat = JSON.stringify(oldchat);
             oldchat = JSON.parse(oldchat);
             //console.log(oldchat);
-            res.render('chat_index', {
-              title: 'message',
+            res.render("chat_index", {
+              title: "message",
               user: req.user,
               username: req.user.username,
               items: items,
               oldchat: oldchat,
-              allusers:allusers
+              allusers: allusers,
             });
           }
         });
@@ -51,31 +51,33 @@ router.get('/', function (req, res, next) {
       user = req.user.username;
     });
   } else {
-    res.redirect('/login');
+    res.redirect("/login");
   }
 });
 
-router.post('/', function (req, res, next) {
-
+router.post("/", function (req, res, next) {
   if (req.user) {
     // Make sure user exists
-    User.findOne({ 'username': req.query.id}).exec(function (err, item) {
+    User.findOne({ username: req.query.id }).exec(function (err, item) {
       if (err) {
-        return next(new Error('Could not load content!'));
-      }
-      else {
+        return next(new Error("Could not load content!"));
+      } else {
         // Check if group with two user exist
-        Chat.findOne({ $or: [{ users: [req.user.username, item.username] }, { users: [item.username, req.user.username] }] }).exec(function (err, userlist) {
+        Chat.findOne({
+          $or: [
+            { users: [req.user.username, item.username] },
+            { users: [item.username, req.user.username] },
+          ],
+        }).exec(function (err, userlist) {
           user1 = req.user.username;
           user2 = item.username;
           requser = user1 + user2;
           if (err) {
-            return next(new Error('Could not found user'));
-          }
-          else if (userlist != null) {
+            return next(new Error("Could not found user"));
+          } else if (userlist != null) {
             //load old message
             messages = userlist.message;
-            res.json({ 'messages': messages });
+            res.json({ messages: messages });
             id = userlist.id;
             groupid[requser] = groupid[requser] || [];
             groupid[requser] = id;
@@ -87,8 +89,7 @@ router.post('/', function (req, res, next) {
                 a = JSON.stringify(p);
                 a = JSON.parse(a);
                 //console.log("yha se phle");
-                if (a[item.username] != null&&a[item.username]!=0) {
-                 
+                if (a[item.username] != null && a[item.username] != 0) {
                   var count = 0;
                   p.set({ [item.username]: count });
                 }
@@ -96,19 +97,17 @@ router.post('/', function (req, res, next) {
                   if (err) {
                     console.log(err);
                   } else {
-                    console.log('user offline Saved Succesfully');
+                    console.log("user offline Saved Succesfully");
                   }
                 });
               }
             });
-
-          }
-          else {
+          } else {
             users = [req.user.username, item.username];
             id = uniqid();
             var chatInstance = new Chat({
               users: users,
-              _id: id
+              _id: id,
             });
             chatInstance.save();
             groupid[requser] = groupid[requser] || [];
@@ -117,9 +116,8 @@ router.post('/', function (req, res, next) {
         });
       }
     });
-  }
-  else {
-    res.redirect('/login');
+  } else {
+    res.redirect("/login");
   }
 });
 io.on("connection", function (client) {
@@ -145,11 +143,11 @@ io.on("connection", function (client) {
           if (err) {
             console.log(err);
           } else {
-            console.log('Message Saved Succesfully');
+            console.log("Message Saved Succesfully");
           }
         });
       }
-    })
+    });
     if (allusers[to] == null) {
       // setting value inside oldchat
       Oldchat.findOne({ _id: to }, function (err, p) {
@@ -157,15 +155,13 @@ io.on("connection", function (client) {
           console.log(to);
           console.log("not found");
         } else {
-
           a = JSON.stringify(p);
           a = JSON.parse(a);
           if (a[from] == null) {
             count = 0;
             count++;
             p.set({ [from]: +count });
-          }
-          else {
+          } else {
             var count = a[from];
             p.set({ [from]: ++count });
           }
@@ -173,15 +169,15 @@ io.on("connection", function (client) {
             if (err) {
               console.log(err);
             } else {
-              console.log('user offline Saved Succesfully');
+              console.log("user offline Saved Succesfully");
             }
           });
         }
       });
     }
   });
-  client.on('typecheck', function (msg, to, from) {
-    var socketid
+  client.on("typecheck", function (msg, to, from) {
+    var socketid;
     socketid = allusers[to];
     client.broadcast.to(socketid).emit("type", msg, from);
   });

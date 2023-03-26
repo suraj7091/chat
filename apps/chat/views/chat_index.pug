@@ -5,13 +5,13 @@ block content
     .card.rare-wind-gradient.chat-room
         .card-header
           |  Chat
-        .card-body
+        .card-body.chat-container
           // Grid row
           .row.px-lg-2.px-2
             // Grid column
             .col-md-6.col-xl-4.px-0
               h6.font-weight-bold.mb-3.text-center.text-lg-left Member
-              .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue
+              .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue.user-list
                 form#userSearchForm 
                   input.user-search(type="text",placeholder=" Find User"  required)
                   button.search-button(type='submit') search
@@ -61,11 +61,12 @@ block content
             .col-md-6.col-xl-8.pl-md-3.px-lg-auto.px-0
               .chat-message
                 ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                  
-                .white#white(style='display:none')
+                .none#white(style='display:none')
                   .form-group.basic-textarea
                       form#messageform
-                        input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
-                        button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right#send(type='submit') Send         
+                        .sendmsg
+                          input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
+                          button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right.send-msg-btn#send(type='submit') Send         
     ul#thread
 block scripts
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')

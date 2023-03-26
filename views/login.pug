@@ -6,11 +6,12 @@ html(lang='en')
     meta(http-equiv='x-ua-compatible', content='ie=edge')
     title login
     // Font Awesome
-    link(href='plugins/node_modules/font-awesome/css/font-awesome.min.css', rel='stylesheet')
+    link(href='/stylesheets/font-awesome.min.css', rel='stylesheet')
     // Bootstrap core CSS
-    link(href='plugins/node_modules/mdbootstrap/css/bootstrap.min.css', rel='stylesheet')
+    link(href='/vendors/mdbootstrap/css/bootstrap.min.css', rel='stylesheet')
     // Material Design Bootstrap
-    link(href='plugins/node_modules/mdbootstrap/css/mdb.min.css', rel='stylesheet')
+    link(href='/vendors/mdbootstrap/css/mdb.min.css', rel='stylesheet')
+    
   body(style='background-color:#cad2d9')
     main
       .container(style='margin-top:10%;')
@@ -46,8 +47,8 @@ html(lang='en')
                   // Sign in button
                   button.btn.btn-rounded.btn-block.my-4.waves-effect.z-depth-0(type='submit',style='background-color:#555555') Sign in
                 // Form
-    script(src='plugins/node_modules/mdbootstrap/js/jquery-3.4.1.min.js')
-    script(src='plugins/node_modules/popper.js')
-    script(src='plugins/node_modules/mdbootstrap/js/bootstrap.min.js')
-    script(src='plugins/node_modules/mdbootstrap/js/mdb.min.js')
+    script(src='/vendors/mdbootstrap/js/jquery-3.3.1.min.js')
+    script(src='/vendor/js/popper.js')
+    script(src='/vendors/mdbootstrap/js/bootstrap.min.js')
+    script(src='/vendors/mdbootstrap/js/mdb.min.js')
     
