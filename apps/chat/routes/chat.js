@@ -84,7 +84,7 @@ router.post("/", function (req, res, next) {
             //setting oldchat as zero
             Oldchat.findOne({ _id: req.user.username }, function (err, p) {
               if (p == null) {
-                console.log("not found");
+                console.log("sender user not found  in old chat");
               } else {
                 a = JSON.stringify(p);
                 a = JSON.parse(a);

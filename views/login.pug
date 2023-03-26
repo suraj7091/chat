@@ -28,18 +28,14 @@ html(lang='en')
                 form.text-center(style='background-color:#ffffff', action="",method="post")
                   // Email
                   .md-form
-                    input#materialLoginFormEmail.form-control(type='text', name='username')
-                    label(for='materialLoginFormEmail') Login Id
+                    input#materialLoginFormEmail.form-control(type='email', name='username' required)
+                    label(for='materialLoginFormEmail') Email
                   // Password
                   .md-form
-                    input#materialLoginFormPassword.form-control(type='password',  name='password' )
+                    input#materialLoginFormPassword.form-control(type='password',  name='password' required)
                     label(for='materialLoginFormPassword') Password
-                  .d-flex.justify-content-around
-                    div
-                      // Remember me
-                      .form-check
-                        input#materialLoginFormRemember.form-check-input(type='checkbox')
-                        label.form-check-label(for='materialLoginFormRemember') Remember me
+                  .d-flex.justify-content-between
+                    a(href="/register") Not registered?
                     div
                       // Forgot password
                     a(href='')

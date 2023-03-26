@@ -89,3 +89,9 @@ top
     white-space: nowrap;
 }
 
+.resiter-select{
+    border:none !important;
+    border-bottom:1px solid #CED4DA !important;
+    padding: 1px !important;
+    color:#757575 !important;
+}

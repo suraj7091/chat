@@ -8,8 +8,8 @@ var chatSchema = new Schema({
             sender:String,
             content:String,
             created:{
-                type: String,
-                default : new Date()
+                type: Date,
+                default : Date.now
             }
         }]
     },{

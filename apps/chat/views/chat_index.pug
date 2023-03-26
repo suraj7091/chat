@@ -3,8 +3,6 @@ block styles
     <link rel="stylesheet" href="stylesheet/chat_index.css">
 block content
     .card.rare-wind-gradient.chat-room
-        .card-header
-          |  Chat
         .card-body.chat-container
           // Grid row
           .row.px-lg-2.px-2
@@ -31,10 +29,11 @@ block content
                                   p=item.username
                                   p.last-message.text-muted
                                   - function get_date(i) {
-                                  - var d = new Date(i)
-                                  - var curd=new Date()
+                                  - let d = new Date(i)
+                                  - let curd=new Date()
                                   - if(curd.getMonth()==d.getMonth()&&curd.getDate()==d.getDate()){
-                                  - return (d.getHours()).toString()+":"+(d.getMinutes()).toString()
+                                  -  let min_pref= d.getMinutes()>9?"":"0"
+                                  - return (d.getHours()).toString()+":"+min_pref+(d.getMinutes()).toString()
                                   - }else{
                                   - return (d.getDate()).toString()+"/"+(d.getMonth()+1).toString()
                                   - }
@@ -44,7 +43,7 @@ block content
                                       svg(height='20', width='20' )
                                         circle(cx='10', cy='10', r='10', stroke='', stroke-width='3', fill='green' style='padding-left:0px;')
                                     else
-                                      p.text-smaller.text-muted.mb-0(id=item.username+"4")='last login '+get_date(item.last_logout)
+                                      p.text-smaller.text-muted.mb-0(id=item.username+"4")='last login '+get_date(item.last_login)
                                     if(typeof(oldchat)!=undefined && typeof(oldchat[item.username])!=undefined )
                                        if(oldchat[item.username]!=0)
                                         span.badge.badge-danger.float-right(id=item.username+"3")=oldchat[item.username]
@@ -74,15 +73,16 @@ block scripts
   script(src='js/userSearch.js')
   script(src='js/client.js') 
   script(type='text/javascript').
-        var from='#{username}';
-        var to;
-        var params = (new URL(document.location)).searchParams;
-        var userId = params.get("id");
-        var classname = document.getElementsByClassName("person");
-        var myFunction = function()
+        let from='#{username}';
+        let to;
+        //-  do not remove above 2 lines used in client js for connection
+        let params = (new URL(document.location)).searchParams;
+        let userId = params.get("id");
+        let classname = document.getElementsByClassName("person");
+        let myFunction = function()
         { 
           document.getElementById("chat-message").innerHTML='';
-          var attribute;
+          let attribute;
           document.getElementById("white").style.display='block';
           if(userId!=null)
           {
@@ -95,9 +95,9 @@ block scripts
           }
           document.getElementById(attribute+"3").style.display='none';
           document.getElementById(attribute+"3").innerHTML=0;
-          var person=document.getElementsByClassName("person");
+          let person=document.getElementsByClassName("person");
           to=attribute;
-          for(var j=0;j<person.length;j++)
+          for(let j=0;j<person.length;j++)
           {
              person[j].style.backgroundColor='white';
           }
@@ -106,19 +106,19 @@ block scripts
           {
             myjson = json;
   
-            for(var j=0;j<myjson.messages.length;j++)
+            for(let j=0;j<myjson.messages.length;j++)
             {
-            var  date=myjson.messages[j].created;
-            var  changeddate=date.split(" ");
+            let  date=new Date(Date.parse(myjson.messages[j].created));
+            let istTime = date.toLocaleString()
               if(myjson.messages[j].sender=='#{username}'){
-              $("#chat-message").append('  <li class="d-flex justify-content-between mb-4" ><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px;" > <div class="header"><strong class="primary-font">'+myjson.messages[j].sender+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+changeddate[1]+' '+changeddate[2]+' '+changeddate[3]+'</small></div><hr class="w-100"/> <p class="mb-0">'+myjson.messages[j].content+'</p </div> </li>');
+              $("#chat-message").append('  <li class="d-flex justify-content-between mb-4" ><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px;" > <div class="header"><strong class="primary-font">'+'You'+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+istTime+'</small></div><hr class="w-100"/> <p class="mb-0">'+myjson.messages[j].content+'</p </div> </li>');
               }
               else
               {
-                $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body p-3 z-depth-1 " style="margin-left:70%;min-width:200px; background-color:#EEEEEE"><div class="header"><strong class="primary-font">'+myjson.messages[j].sender+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+changeddate[1]+' '+changeddate[2]+' '+changeddate[3]+'</small></div><hr class="w-100"/><p class="mb-0">'+myjson.messages[j].content+'</p></div> </li>');
+                $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body p-3 z-depth-1 " style="margin-left:70%;min-width:200px; background-color:#EEEEEE"><div class="header"><strong class="primary-font">'+'Other'+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+istTime+'</small></div><hr class="w-100"/><p class="mb-0">'+myjson.messages[j].content+'</p></div> </li>');
               }
             }
-            var elem = document.getElementById('chat-message');
+            let elem = document.getElementById('chat-message');
             elem.scrollTop = elem.scrollHeight;
           },'json');
 
@@ -130,7 +130,7 @@ block scripts
         {
           myFunction(userId);
         }
-        for (var i = 0; i < classname.length; i++) {
+        for (let i = 0; i < classname.length; i++) {
         classname[i].addEventListener('click', myFunction, false);
         }
   
