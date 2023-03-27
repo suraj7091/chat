@@ -1,138 +1,160 @@
 extends ../../../views/layout
 block styles
-    <link rel="stylesheet" href="stylesheet/chat_index.css">
+  <link rel="stylesheet" href="stylesheet/chat_index.css">
 block content
-    .card.rare-wind-gradient.chat-room
-        .card-body.chat-container
-          // Grid row
-          .row.px-lg-2.px-2
-            // Grid column
-            .col-md-6.col-xl-4.px-0
-              h6.font-weight-bold.mb-3.text-center.text-lg-left Member
-              .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue.user-list
-                form#userSearchForm 
-                  input.user-search(type="text",placeholder=" Find User"  required)
-                  button.search-button(type='submit') search
-                hr
-                ul.list-unstyled.friend-list#user
-                    each item in items 
-                     
-                       if(item.username!=username)
-                          div(id=item.username, class="person")
-                              li.p-2
-                                a.d-flex.justify-content-between
-                                  if item.profile_pic.data
-                                    img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='img/user/'+item.username, alt='avatar')
-                                  else
-                                    img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='/images/profile.png', alt='avatar')
-                                  .text-small
-                                  p=item.username
-                                  p.last-message.text-muted
-                                  - function get_date(i) {
-                                  - let d = new Date(i)
-                                  - let curd=new Date()
-                                  - if(curd.getMonth()==d.getMonth()&&curd.getDate()==d.getDate()){
-                                  -  let min_pref= d.getMinutes()>9?"":"0"
-                                  - return (d.getHours()).toString()+":"+min_pref+(d.getMinutes()).toString()
-                                  - }else{
-                                  - return (d.getDate()).toString()+"/"+(d.getMonth()+1).toString()
-                                  - }
-                                  - }
-                                  .chat-footer
-                                    if(allusers[item.username]!=null)
-                                      svg(height='20', width='20' )
-                                        circle(cx='10', cy='10', r='10', stroke='', stroke-width='3', fill='green' style='padding-left:0px;')
-                                    else
-                                      p.text-smaller.text-muted.mb-0(id=item.username+"4")='last login '+get_date(item.last_login)
-                                    if(typeof(oldchat)!=undefined && typeof(oldchat[item.username])!=undefined )
-                                       if(oldchat[item.username]!=0)
-                                        span.badge.badge-danger.float-right(id=item.username+"3")=oldchat[item.username]
-                                       else
-                                        span.badge.badge-danger.float-right(id=item.username+"3" style='display:none')=0
+  .card.rare-wind-gradient.chat-room
+    .card-body.chat-container
+      // Grid row
+      .row.px-lg-2.px-2
+        // Grid column
+        .col-md-6.col-xl-4.px-0
+          h6.font-weight-bold.mb-3.text-center.text-lg-left Member
+          .white.z-depth-1.px-2.pt-3.pb-0.members-panel-1.scrollbar-light-blue.user-list
+            form#userSearchForm 
+              input.user-search(type="text",placeholder=" Find User"  required)
+              button.search-button(type='submit') search
+            hr
+            ul.list-unstyled.friend-list#user
+              each item in items 
 
-                                    span.float-left
-                                      p(id=item.username+"2" style='color:green' class='chat')
-                                     
-                                  
-                          hr            
-            // Grid column
-            // Grid column
-            .col-md-6.col-xl-8.pl-md-3.px-lg-auto.px-0
-              .chat-message
-                ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                  
-                .none#white(style='display:none')
-                  .form-group.basic-textarea
+                if(item.username!=username)
+                  div(id=item.username, class="person"  data-bs-toggle='modal' data-bs-target='#exampleModal')
+                    li.p-2
+                      a.d-flex.justify-content-between
+                        if item.profile_pic.data
+                          img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='img/user/'+item.username, alt='avatar')
+                        else
+                          img.avatar.rounded-circle.d-flex.align-self-center.mr-2.z-depth-1(src='/images/profile.png', alt='avatar')
+                        .text-small
+                        p=item.username
+                        p.last-message.text-muted
+                        - function get_date(i) {
+                        - let d = new Date(i)
+                        - let curd=new Date()
+                        - if(curd.getMonth()==d.getMonth()&&curd.getDate()==d.getDate()){
+                        -  let min_pref= d.getMinutes()>9?"":"0"
+                        - return (d.getHours()).toString()+":"+min_pref+(d.getMinutes()).toString()
+                        - }else{
+                        - return (d.getDate()).toString()+"/"+(d.getMonth()+1).toString()
+                        - }
+                        - }
+                        .chat-footer
+                          if(allusers[item.username]!=null)
+                            svg(height='20', width='20' )
+                              circle(cx='10', cy='10', r='10', stroke='', stroke-width='3', fill='green' style='padding-left:0px;')
+                          else
+                            p.text-smaller.text-muted.mb-0(id=item.username+"4")='last login '+get_date(item.last_login)
+                          if(typeof(oldchat)!=undefined && typeof(oldchat[item.username])!=undefined )
+                            if(oldchat[item.username]!=0)
+                              span.badge.badge-danger.float-right(id=item.username+"3")=oldchat[item.username]
+                            else
+                              span.badge.badge-danger.float-right(id=item.username+"3" style='display:none')=0
+
+                          span.float-left
+                            p(id=item.username+"2" style='color:green' class='chat')
+                    //- button.btn.btn-info.btn-lg(type='button' data-bs-toggle='modal' data-bs-target='#exampleModal') Open Modal
+
+
+
+                  hr            
+        // Grid column
+        // Grid column
+
+        #exampleModal.modal.fade(tabindex='-1' aria-labelledby='exampleModalLabel' aria-hidden='true')
+          .modal-dialog
+            .modal-content.chat-modal-content
+              .modal-header
+                h5#exampleModalLabel.modal-title
+                button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close') X
+              .modal-body#chat-modal
+                .chat-message
+                  ul.list-unstyled.chat-1.scrollbar-light-blue.chat-modal-list#chat-message                  
+                  .none#white(style='display:none')
+                    .form-group.basic-textarea
                       form#messageform
                         .sendmsg
                           input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
                           button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right.send-msg-btn#send(type='submit') Send         
-    ul#thread
+        .col-md-6.col-xl-8.pl-md-3.px-lg-auto.px-0#chat-mobile-remove
+          .chat-message
+            ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                  
+            .none#white(style='display:none')
+              .form-group.basic-textarea
+                form#messageform
+                  .sendmsg
+                    input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
+                    button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right.send-msg-btn#send(type='submit') Send 
 block scripts
   script(src='https://code.jquery.com/jquery-3.1.1.min.js')
   script(src='js/socket.io.js')
-  script(src='js/userSearch.js')
-  script(src='js/client.js') 
+  script(src='js/userSearch.js') 
   script(type='text/javascript').
-        let from='#{username}';
-        let to;
-        //-  do not remove above 2 lines used in client js for connection
-        let params = (new URL(document.location)).searchParams;
-        let userId = params.get("id");
-        let classname = document.getElementsByClassName("person");
-        let myFunction = function()
-        { 
-          document.getElementById("chat-message").innerHTML='';
-          let attribute;
-          document.getElementById("white").style.display='block';
-          if(userId!=null)
-          {
-           
-            attribute=userId
+    if (screen.width > 1000) {
+    document.getElementById('exampleModal').remove()
+    $('.person').removeAttr('data-bs-toggle')
+    } 
+    else {
+      document.getElementById('chat-mobile-remove').remove()
+    }
+    let from = '#{username}';
+    let to;
+    let params = (new URL(document.location)).searchParams;
+    let userId = params.get("id");
+    let classname = document.getElementsByClassName("person");
+    let myFunction = function () {
+      let attribute;
+      document.getElementById("white").style.display = 'block';
+      if (userId != null) {
+        attribute = userId
+      }
+      else {
+        attribute = this.getAttribute("id");
+      }
+      if (screen.width < 1000) {
+        document.getElementById("exampleModalLabel").innerHTML = attribute;
+      }
+      document.getElementById("chat-message").innerHTML = '';
+
+      document.getElementById(attribute + "3").style.display = 'none';
+      document.getElementById(attribute + "3").innerHTML = 0;
+      let person = document.getElementsByClassName("person");
+      to = attribute;
+      for (let j = 0; j < person.length; j++) {
+        person[j].style.backgroundColor = 'white';
+      }  document.getElementById(attribute).style.backgroundColor = '#eff2f4';
+      $.post('/chat?id=' + attribute, {}, function (json) {
+        myjson = json;
+
+        for (let j = 0; j < myjson.messages.length; j++) {
+          let date = new Date(Date.parse(myjson.messages[j].created));
+          let istTime = date.toLocaleString()
+          if (myjson.messages[j].sender == '#{username}') {
+            $("#chat-message").append('  <li class="d-flex justify-content-between mb-4" ><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px;" > <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/> <p class="mb-0">' + myjson.messages[j].content + '</p </div> </li>');
           }
-          else
-          {
-          attribute = this.getAttribute("id");
+          else {
+            $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body p-3 z-depth-1 " style="margin-left:70%;min-width:200px; background-color:#EEEEEE"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/><p class="mb-0">' + myjson.messages[j].content + '</p></div> </li>');
           }
-          document.getElementById(attribute+"3").style.display='none';
-          document.getElementById(attribute+"3").innerHTML=0;
-          let person=document.getElementsByClassName("person");
-          to=attribute;
-          for(let j=0;j<person.length;j++)
-          {
-             person[j].style.backgroundColor='white';
-          }
-          document.getElementById(attribute).style.backgroundColor='#eff2f4';
-          $.post('/chat?id='+attribute,{},function(json)
-          {
-            myjson = json;
-  
-            for(let j=0;j<myjson.messages.length;j++)
-            {
-            let  date=new Date(Date.parse(myjson.messages[j].created));
-            let istTime = date.toLocaleString()
-              if(myjson.messages[j].sender=='#{username}'){
-              $("#chat-message").append('  <li class="d-flex justify-content-between mb-4" ><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px;" > <div class="header"><strong class="primary-font">'+'You'+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+istTime+'</small></div><hr class="w-100"/> <p class="mb-0">'+myjson.messages[j].content+'</p </div> </li>');
-              }
-              else
-              {
-                $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body p-3 z-depth-1 " style="margin-left:70%;min-width:200px; background-color:#EEEEEE"><div class="header"><strong class="primary-font">'+'Other'+'</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+istTime+'</small></div><hr class="w-100"/><p class="mb-0">'+myjson.messages[j].content+'</p></div> </li>');
-              }
-            }
-            let elem = document.getElementById('chat-message');
+        }
+        if (screen.width < 1000) {
+          setTimeout(()=>{
+             let elem = document.getElementById('chat-message');
             elem.scrollTop = elem.scrollHeight;
-          },'json');
-
-          userId=null
-        };
-       
-        
-        if(userId!=null)
-        {
-          myFunction(userId);
+            }, 500)
+        } else {
+          let elem = document.getElementById('chat-message');
+          debugger
+          elem.scrollTop = elem.scrollHeight;
         }
-        for (let i = 0; i < classname.length; i++) {
-        classname[i].addEventListener('click', myFunction, false);
-        }
-  
+      }, 'json');
 
-   
+      userId = null
+    };
+    if (userId != null) {
+      myFunction(userId);
+    }
+    for (let i = 0; i < classname.length; i++) {
+      classname[i].addEventListener('click', myFunction, false);
+    }
+  script(src='js/client.js')
+  //do not changes the line of above src include 
+

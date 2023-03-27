@@ -70,6 +70,12 @@
   height:78vh;
 }
 .chat-container{
-  height: 94vh;
+  height: 100%;
   margin-top: 40px;
+}
+.chat-modal-list{
+  height: 60vh !important;
+}
+.chat-modal-content{
+  height: 90vh ;
 }
