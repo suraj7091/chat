@@ -129,10 +129,10 @@ block scripts
           let date = new Date(Date.parse(myjson.messages[j].created));
           let istTime = date.toLocaleString()
           if (myjson.messages[j].sender == '#{username}') {
-            $("#chat-message").append('  <li class="d-flex justify-content-between mb-4" ><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px;" > <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/> <p class="mb-0">' + myjson.messages[j].content + '</p </div> </li>');
+            $("#chat-message").append('  <li class="d-flex justify-content-between mb-3" ><div class="chat-body white p-3 ml-2 z-depth-1" style="max-width:90%"> <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/> <p class="mb-0">' + myjson.messages[j].content + '</p </div> </li>');
           }
           else {
-            $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body p-3 z-depth-1 " style="margin-left:70%;min-width:200px; background-color:#EEEEEE"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/><p class="mb-0">' + myjson.messages[j].content + '</p></div> </li>');
+            $("#chat-message").append('<li class="d-flex justify-content-between mb-3"><div></div><div class="chat-body p-3 z-depth-1 " style="background-color:#EEEEEE;margin-right:10px;max-width:90%"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/><p class="mb-0">' + myjson.messages[j].content + '</p></div> </li>');
           }
         }
         if (screen.width < 1000) {
@@ -142,7 +142,6 @@ block scripts
             }, 500)
         } else {
           let elem = document.getElementById('chat-message');
-          debugger
           elem.scrollTop = elem.scrollHeight;
         }
       }, 'json');

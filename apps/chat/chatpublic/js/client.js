@@ -20,15 +20,17 @@ function timeoutclientFunction() {
 }
 //on message from sender 
 socket.on("thread", function (data, sender) {
+  let date = new Date(Date.now());
+  let istTime = date.toLocaleString()
   if (sender == from) {//if sender is same as user
-    $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body white p-3 ml-2 z-depth-1" style="min-width:200px ;"> <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> just Now</small></div><hr class="w-100"/> <p class="mb-0">' + data + '</p </div> </li>');
+    $("#chat-message").append('<li class="d-flex justify-content-between mb-3"><div class="chat-body white p-3 ml-2 z-depth-1" style="max-width:90%"> <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i>'+istTime+'</small></div><hr class="w-100"/> <p class="mb-0">' + data + '</p </div> </li>');
     var elem = document.getElementById('chat-message');
     elem.scrollTop = elem.scrollHeight;
   }
   else {
     if (sender == to)//if user is chatting with sender
     {
-      $("#chat-message").append('<li class="d-flex justify-content-between mb-4"><div class="chat-body  p-3 z-depth-1 " style="margin-left:70%;min-width:200px;background-color:lightgreen;"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> JustNow</small></div><hr class="w-100"/><p class="mb-0">' + data + '</p></div> </li>');
+      $("#chat-message").append('<li class="d-flex justify-content-between mb-3"><div></div><div class="chat-body  p-3 z-depth-1 " style="margin-right:10px;background-color:lightgreen;max-width:90%;"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> '+istTime+'</small></div><hr class="w-100"/><p class="mb-0">' + data + '</p></div> </li>');
       var elem = document.getElementById('chat-message');
       elem.scrollTop = elem.scrollHeight;
     }
@@ -41,7 +43,7 @@ socket.on("thread", function (data, sender) {
   }
 });
 // sends message to server, resets & prevents default form action
-$("#messageform").submit(function () {
+$("#messageform").on('submit',function () {
   var message = $("#exampleFormControlTextarea2.form-control.pl-2.my-0").val();
   if (message != '') {
     socket.emit("messages", message, from, to);
@@ -50,7 +52,7 @@ $("#messageform").submit(function () {
   return false;
 });
 //typing notification
-$("#exampleFormControlTextarea2.form-control.pl-2.my-0").keypress(function () {
+$("#exampleFormControlTextarea2.form-control.pl-2.my-0").on('keydown',function () {
   msg = 'Typing...';
   if (type == false) {
     socket.emit('typecheck', msg, to, from);
