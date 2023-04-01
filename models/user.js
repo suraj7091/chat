@@ -17,7 +17,7 @@ var User = new Schema({
     type: String,
     required: true
   },
-  last_login :{
+  last_active :{
     type: Date,
     required: false
   },
@@ -28,7 +28,10 @@ var User = new Schema({
   dob :{
     type: Date,
     required: true
-  }
+  },
+  socket_id:{
+    type:String,
+  },
 }, {
   timestamps: true
 });

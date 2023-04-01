@@ -17,12 +17,7 @@ router.post('/', function(req, res) {
     User.register(new User({ username : req.body.username, name:req.body.name,gender:req.body.gender,dob:req.body.dob,last_login:new Date()}), req.body.password, function(err, account) {
     if (err) {
         return res.render("register", {info: err})
-    }
-    id = req.body.username;
-    var chatInstance = new Oldchat({
-      _id: id,
-    });
-    chatInstance.save();    
+    }   
     passport.authenticate('local')(req, res, function () {
         res.redirect('/chat');
     });
