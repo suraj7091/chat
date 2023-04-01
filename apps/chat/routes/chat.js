@@ -101,7 +101,11 @@ io.on("connection", function (client) {
       }
       client.broadcast.to(receiver.socket_id).emit("thread", data, from);
       client.emit("thread", data, from);
-      if (!receiver.socker_id) {
+      let receiver_json =JSON.parse(JSON.stringify(receiver))
+      let user_online=true;
+      if (!receiver_json.socket_id) {
+        user_online=false
+      }
         Oldchat.findOne({ $or: [{ users: [to,from] }, { users: [from, to] },], })
           .exec(function (err, old_chat) {
             if (err !== null) {
@@ -109,7 +113,7 @@ io.on("connection", function (client) {
               return
             } if (old_chat != null) {
               old_chat.set({
-                'offline_count': (old_chat.offline_count || 0) + 1, 'seen_status': 0, 'sender': from,
+                'offline_count': user_online?0:(old_chat.offline_count || 0) + 1, 'seen_status': user_online?2:0, 'sender': from,
                 'receiver': to, created: Date.now(),message:data
               });
               old_chat.save(function (err) {
@@ -122,7 +126,7 @@ io.on("connection", function (client) {
             } else {
               let old_chat = new Oldchat({
                 _id:uniqid(),
-                'offline_count': 1, 'seen_status': 0, 'sender': from,
+                'offline_count': user_online?0:1, 'seen_status': user_online?2:0, 'sender': from,
                 'receiver': to, created: Date.now(),message:data,users: [from, to]
               })
               old_chat.save(function (err) {
@@ -134,7 +138,6 @@ io.on("connection", function (client) {
               })
             }
           });
-      }
       let chatInstance = new Chat({
         _id:uniqid(),
         users: [from, to],
