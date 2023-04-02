@@ -39,7 +39,7 @@ router.post("/", function (req, res, next) {
     return;
   }
   // Make sure user exists
-  let page_size=10
+  let page_size = 20
   User.findOne({ username: req.query.id }).exec(function (err, item) {
     if (err) {
       return next(new Error("Could not Found Chat for selected User!"));
@@ -47,29 +47,34 @@ router.post("/", function (req, res, next) {
     // Check if group with two user exist
     Chat.find({
       $or: [{ users: [req.user.username, item.username] }, { users: [item.username, req.user.username] },],
-    }).sort({ created: -1 }).skip((req.query.page||0)*page_size).limit(page_size).exec(function (err, messages) {
+    }).sort({ created: -1 }).skip((req.query.page || 0) * page_size).limit(page_size).exec(function (err, messages) {
       if (err) {
         return next(new Error("Could not found user"));
       } else if (messages != null) {
-        res.json({ 'messages': messages });
-        Oldchat.findOne({ $or: [{ users: [req.user.username, item.username] }, { users: [item.username, req.user.username] },], })
-          .exec(function (err, old_chat) {
-            if (err !== null) {
-              console.log("following error occured while finding old chat" + err);
-              return
-            } if (old_chat != null) {
-              if(old_chat.receiver==req.user.username){
-              old_chat.set({ 'offline_count': 0, seen_status: 2 });
-              }
-              old_chat.save(function (err) {
-                if (err) {
-                  console.log("following error occured while updating old chat" + err);
-                } else {
-                  console.log("Old chat updated with 0 count for user" + req.user.username);
+        Chat.find({
+          $or: [{ users: [req.user.username, item.username] }, { users: [item.username, req.user.username] },],
+        }).count().exec(function (err, message_count) {
+          res.json({ 'messages': messages,'count':message_count });
+          Oldchat.findOne({ $or: [{ users: [req.user.username, item.username] }, { users: [item.username, req.user.username] },], })
+            .exec(function (err, old_chat) {
+              if (err !== null) {
+                console.log("following error occured while finding old chat" + err);
+                return
+              } if (old_chat != null) {
+                if (old_chat.receiver == req.user.username) {
+                  old_chat.set({ 'offline_count': 0, seen_status: 2 });
                 }
-              });
-            }
-          });
+                old_chat.save(function (err) {
+                  if (err) {
+                    console.log("following error occured while updating old chat" + err);
+                  } else {
+                    console.log("Old chat updated with 0 count for user" + req.user.username);
+                  }
+                });
+              }
+            });
+        })
+
       } else {
         res.json({})
       }
@@ -103,45 +108,45 @@ io.on("connection", function (client) {
       }
       client.broadcast.to(receiver.socket_id).emit("thread", data, from);
       client.emit("thread", data, from);
-      let receiver_json =JSON.parse(JSON.stringify(receiver))
-      let user_online=true;
+      let receiver_json = JSON.parse(JSON.stringify(receiver))
+      let user_online = true;
       if (!receiver_json.socket_id) {
-        user_online=false
+        user_online = false
       }
-        Oldchat.findOne({ $or: [{ users: [to,from] }, { users: [from, to] },], })
-          .exec(function (err, old_chat) {
-            if (err !== null) {
-              console.log("following error occured while finding old chat" + err);
-              return
-            } if (old_chat != null) {
-              old_chat.set({
-                'offline_count': user_online?0:(old_chat.offline_count || 0) + 1, 'seen_status': user_online?2:0, 'sender': from,
-                'receiver': to, created: Date.now(),message:data
-              });
-              old_chat.save(function (err) {
-                if (err) {
-                  console.log("following error occured while updating old chat" + err);
-                } else {
-                  console.log("Old chat updated with new count count for user" + from + " " + to);
-                }
-              });
-            } else {
-              let old_chat = new Oldchat({
-                _id:uniqid(),
-                'offline_count': user_online?0:1, 'seen_status': user_online?2:0, 'sender': from,
-                'receiver': to, created: Date.now(),message:data,users: [from, to]
-              })
-              old_chat.save(function (err) {
-                if (err) {
-                  console.log("following error occured while creating old chat" + err);
-                } else {
-                  console.log("Old chat creatd for user" + from + " " + to);
-                }
-              })
-            }
-          });
+      Oldchat.findOne({ $or: [{ users: [to, from] }, { users: [from, to] },], })
+        .exec(function (err, old_chat) {
+          if (err !== null) {
+            console.log("following error occured while finding old chat" + err);
+            return
+          } if (old_chat != null) {
+            old_chat.set({
+              'offline_count': user_online ? 0 : (old_chat.offline_count || 0) + 1, 'seen_status': user_online ? 2 : 0, 'sender': from,
+              'receiver': to, created: Date.now(), message: data
+            });
+            old_chat.save(function (err) {
+              if (err) {
+                console.log("following error occured while updating old chat" + err);
+              } else {
+                console.log("Old chat updated with new count count for user" + from + " " + to);
+              }
+            });
+          } else {
+            let old_chat = new Oldchat({
+              _id: uniqid(),
+              'offline_count': user_online ? 0 : 1, 'seen_status': user_online ? 2 : 0, 'sender': from,
+              'receiver': to, created: Date.now(), message: data, users: [from, to]
+            })
+            old_chat.save(function (err) {
+              if (err) {
+                console.log("following error occured while creating old chat" + err);
+              } else {
+                console.log("Old chat creatd for user" + from + " " + to);
+              }
+            })
+          }
+        });
       let chatInstance = new Chat({
-        _id:uniqid(),
+        _id: uniqid(),
         users: [from, to],
         _id: uniqid(),
         receiver: to,
@@ -152,7 +157,7 @@ io.on("connection", function (client) {
         if (err) {
           console.log("following error occured while creating  chat" + err);
         } else {
-          console.log("Chat creatd for user" + from+" "+to);
+          console.log("Chat creatd for user" + from + " " + to);
         }
       })
     })

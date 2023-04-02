@@ -70,8 +70,8 @@ block content
                           input#exampleFormControlTextarea2.form-control.pl-2.my-0(type='text', placeholder='Type your message here...' required)
                           button.btn.btn-outline-pink.btn-rounded.btn-sm.waves-effect.waves-dark.float-right.send-msg-btn#send(type='submit') Send         
         .col-md-6.col-xl-8.pl-md-3.px-lg-auto.px-0#chat-mobile-remove
-          .chat-message
-            ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                  
+          .chat-message 
+            ul.list-unstyled.chat-1.scrollbar-light-blue#chat-message                
             .none#white(style='display:none')
               .form-group.basic-textarea
                 form#messageform
@@ -83,6 +83,7 @@ block scripts
   script(src='js/socket.io.js')
   script(src='js/userSearch.js') 
   script(type='text/javascript').
+    let page=0;let page_size=20;
     if (screen.width > 1000) {
       document.getElementById('exampleModal').remove()
       $('.person').removeAttr('data-bs-toggle')
@@ -92,10 +93,66 @@ block scripts
     }
     let from = '#{username}';
     let to;
-    let params = (new URL(document.location)).searchParams;
-    let userId = params.get("id");
-    //let classname = document.getElementsByClassName("person");
+    let loadMoreChat=function(){
+      page++;
+      $("#load-more-button").remove()
+      $.post(`/chat?id=${to}&page=${page}`, {}, function (response) {
+        let messages = response.messages ||[]
+        let elem = document.getElementById('chat-message');
+        let prev_height =elem.scrollHeight;
+        let total_height =0;
+        for (let j = 0; j < messages.length; j++) {
+          let date = new Date(Date.parse(messages[j].created));
+          let istTime = date.toLocaleString()
+          if (messages[j].sender == '#{username}') {
+            $("#chat-message").prepend('<li class="d-flex justify-content-between mb-3" ><div class="chat-body white p-3 ml-2 z-depth-1" style="max-width:90%"> <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/> <p class="mb-0">' + messages[j].message + '</p </div> </li>');
+              total_height=total_height+elem.scrollHeight-prev_height;
+              prev_height =elem.scrollHeight;
+
+          }
+          else {
+            $("#chat-message").prepend('<li class="d-flex justify-content-between mb-3"><div></div><div class="chat-body p-3 z-depth-1 " style="background-color:#EEEEEE;margin-right:10px;max-width:90%"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/><p class="mb-0">' + messages[j].message + '</p></div> </li>');
+             total_height=total_height+elem.scrollHeight-prev_height;
+              prev_height =elem.scrollHeight;
+          }
+        }
+        if(response.count>(page+1)*page_size){
+            $("#chat-message").prepend(`<button onclick="loadMoreChat()" id="load-more-button">load more..</button>`)
+            total_height=total_height+elem.scrollHeight-prev_height;
+              prev_height =elem.scrollHeight;
+        }
+        elem.scrollTo(0,total_height);
+      }, 'json');
+    }
+    let loadChat =function(){
+      $.post('/chat?id=' + to, {}, function (response) {
+        let messages = response.messages ||[]
+        for (let j = 0; j < messages.length; j++) {
+          let date = new Date(Date.parse(messages[j].created));
+          let istTime = date.toLocaleString()
+          if (messages[j].sender == '#{username}') {
+            $("#chat-message").prepend('<li class="d-flex justify-content-between mb-3" ><div class="chat-body white p-3 ml-2 z-depth-1" style="max-width:90%"> <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/> <p class="mb-0">' + messages[j].message + '</p </div> </li>');
+          }
+          else {
+            $("#chat-message").prepend('<li class="d-flex justify-content-between mb-3"><div></div><div class="chat-body p-3 z-depth-1 " style="background-color:#EEEEEE;margin-right:10px;max-width:90%"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/><p class="mb-0">' + messages[j].message + '</p></div> </li>');
+          }
+        }
+        if(response.count>(page+1)*page_size){
+            $("#chat-message").prepend(`<button onclick="loadMoreChat()" id="load-more-button">load more..</button>`)
+        }
+        if (screen.width < 1000) {
+          setTimeout(()=>{
+             let elem = document.getElementById('chat-message');
+            elem.scrollTop = elem.scrollHeight;
+            }, 500)
+        } else {
+          let elem = document.getElementById('chat-message');
+          elem.scrollTop = elem.scrollHeight;
+        }
+      }, 'json');
+    }
     let myFunction = function () {
+      page=0;
       document.getElementById("white").style.display = 'block';
       to = userId?userId:this.getAttribute("id");
       if (screen.width < 1000) {
@@ -109,31 +166,12 @@ block scripts
       for (let j = 0; j < person.length; j++) {
         person[j].style.backgroundColor = 'white';
       }  document.getElementById(to).style.backgroundColor = '#eff2f4';
-      $.post('/chat?id=' + to, {}, function (response) {
-        let messages = response.messages ||[]
-        for (let j = 0; j < messages.length; j++) {
-          let date = new Date(Date.parse(messages[j].created));
-          let istTime = date.toLocaleString()
-          if (messages[j].sender == '#{username}') {
-            $("#chat-message").append('  <li class="d-flex justify-content-between mb-3" ><div class="chat-body white p-3 ml-2 z-depth-1" style="max-width:90%"> <div class="header"><strong class="primary-font">' + 'You' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/> <p class="mb-0">' + messages[j].message + '</p </div> </li>');
-          }
-          else {
-            $("#chat-message").append('<li class="d-flex justify-content-between mb-3"><div></div><div class="chat-body p-3 z-depth-1 " style="background-color:#EEEEEE;margin-right:10px;max-width:90%"><div class="header"><strong class="primary-font">' + 'Other' + '</strong><small class="pull-right text-muted"><i class="fa fa-clock-o"></i> ' + istTime + '</small></div><hr class="w-100"/><p class="mb-0">' + messages[j].message + '</p></div> </li>');
-          }
-        }
-        if (screen.width < 1000) {
-          setTimeout(()=>{
-             let elem = document.getElementById('chat-message');
-            elem.scrollTop = elem.scrollHeight;
-            }, 500)
-        } else {
-          let elem = document.getElementById('chat-message');
-          elem.scrollTop = elem.scrollHeight;
-        }
-      }, 'json');
-
+      loadChat()
       userId = null
     };
+    //get data for manually search user
+    let params = (new URL(document.location)).searchParams;
+    let userId = params.get("id");
     if (userId != null) {
       let elem = document.getElementById(userId)
       if(elem){

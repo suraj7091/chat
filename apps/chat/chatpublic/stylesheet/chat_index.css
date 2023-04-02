@@ -82,3 +82,9 @@
 .last-chat-div{
   margin-bottom: 0px;
 }
+#load-more-button{
+  margin-left: 50%;
+    border: none;
+    color: blue;
+    background: transparent;
+}
