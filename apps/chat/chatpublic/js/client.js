@@ -7,9 +7,14 @@ socket = io.connect("http://192.168.101.24:7777", { secure: true }); socket.on("
   socket.emit("join", socket.id, from);
 });
 socket.on("type", function (msg, sender) {
-  console.log('typing');
   let elem =document.getElementById(sender + "2")
   if(elem){elem.innerHTML = msg;}
+  if(sender==to){
+    let typing_elem=document.getElementById('show_typing')
+    if(typing_elem){
+      typing_elem.innerHTML='typing....'
+    }
+  }
   clearInterval(timeoutclient);
   timeoutclient = setTimeout(timeoutclientFunction, 5000);
 });

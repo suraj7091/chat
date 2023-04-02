@@ -59,6 +59,8 @@ block content
             .modal-content.chat-modal-content
               .modal-header
                 h5#exampleModalLabel.modal-title
+                span.float-left
+                  p(id="show_typing" style='color:green' class='chat')
                 button.btn-close(type='button' data-bs-dismiss='modal' aria-label='Close') X
               .modal-body#chat-modal
                 .chat-message
@@ -83,7 +85,7 @@ block scripts
   script(src='js/socket.io.js')
   script(src='js/userSearch.js') 
   script(type='text/javascript').
-    let page=0;let page_size=20;
+    let page=0;let page_size=100;
     if (screen.width > 1000) {
       document.getElementById('exampleModal').remove()
       $('.person').removeAttr('data-bs-toggle')

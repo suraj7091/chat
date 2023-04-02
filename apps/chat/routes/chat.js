@@ -39,7 +39,7 @@ router.post("/", function (req, res, next) {
     return;
   }
   // Make sure user exists
-  let page_size = 20
+  let page_size = 100
   User.findOne({ username: req.query.id }).exec(function (err, item) {
     if (err) {
       return next(new Error("Could not Found Chat for selected User!"));
