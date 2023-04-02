@@ -36,8 +36,10 @@ router.get("/", function (req, res, next) {
 router.post("/", function (req, res, next) {
   if (!req.user) {
     res.redirect("/login");
+    return;
   }
   // Make sure user exists
+  let page_size=10
   User.findOne({ username: req.query.id }).exec(function (err, item) {
     if (err) {
       return next(new Error("Could not Found Chat for selected User!"));
@@ -45,7 +47,7 @@ router.post("/", function (req, res, next) {
     // Check if group with two user exist
     Chat.find({
       $or: [{ users: [req.user.username, item.username] }, { users: [item.username, req.user.username] },],
-    }).exec(function (err, messages) {
+    }).sort({ created: -1 }).skip((req.query.page||0)*page_size).limit(page_size).exec(function (err, messages) {
       if (err) {
         return next(new Error("Could not found user"));
       } else if (messages != null) {
